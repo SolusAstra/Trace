@@ -1,21 +1,17 @@
 #pragma once
 #include <sutil/vec_math.h>
 
-
 namespace Trace {
 
-    class MaterialConfig;
+    struct Material;
 
     struct Record {
 
-        bool emitter = false;
-
-        float t, u, v;
+        Material* material;
         float3 point;		// Collision point
         float3 normal;		// Normal vector
-        
-        // Material
-        MaterialConfig* material;
+        float t;			// Ray parameter
+
     };
 
 };

@@ -27,7 +27,7 @@ namespace Trace {
     //struct Polarization;
     //struct AtmosphericInteraction;
 
-    __device__ void LambertianScattering(float3& rayDir, const float3& normal, curandState* rand) {
+    __forceinline __device__ void LambertianScattering(float3& rayDir, const float3& normal, curandState* rand) {
 
         // Default behavior
         rayDir = normal;
@@ -39,7 +39,7 @@ namespace Trace {
         }
     }
 
-    __device__ void SpecularScattering(float3& rayDir, const float3& normal, float roughness, curandState* rand) {
+    __forceinline __device__ void SpecularScattering(float3& rayDir, const float3& normal, float roughness, curandState* rand) {
         rayDir = normalize(reflect(rayDir, normal) + roughness * randFloat3(rand));
     }
 
@@ -47,9 +47,10 @@ namespace Trace {
     class Material {
 
     public:
-        __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand) = 0;
+        __forceinline __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand) = 0;
+        __forceinline __host__ __device__ virtual float3 getAlbedo() = 0;
 
-        __device__ virtual void updateTransform(const Transform& transform) = 0;
+        //__device__ virtual void updateTransform(const Transform& transform) = 0;
         //__device__ virtual void computeAlbedo(float3& albedoResult, Trace::Record& hit) = 0;
     };
 
@@ -58,9 +59,13 @@ namespace Trace {
     public:
         float3 albedo = make_float3(0.0f);
 
-        __device__ DiffuseReflection() {}
+        __forceinline __host__ __device__ DiffuseReflection() {}
+        __forceinline __host__ __device__ DiffuseReflection(float3 albedo) : albedo(albedo) {}
 
-        __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand = nullptr);
+        __forceinline __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand = nullptr);
+        __forceinline __host__ __device__ virtual float3 getAlbedo() override {
+            return albedo;
+        }
 
     };
 
@@ -71,14 +76,18 @@ namespace Trace {
         float3 albedo = make_float3(0.0f);
         float roughness = 0.0f;
 
-        __device__ SpecularReflection() {}
+        __forceinline __host__ __device__ SpecularReflection() {}
+        __forceinline __host__ __device__ SpecularReflection(float3 albedo, float roughness) : albedo(albedo), roughness(roughness) {}
 
-        __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand = nullptr) override {
+        __forceinline __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand = nullptr) override {
             ray.albedo = albedo;
             ray.org = hit.point;
             SpecularScattering(ray.dir, hit.normal, roughness, rand);
             return true;
         };
+        __forceinline __host__ __device__ virtual float3 getAlbedo() override {
+            return albedo;
+        }
 
     };
 
@@ -94,7 +103,7 @@ namespace Trace {
 
     };
 
-    __device__ bool DiffuseReflection::scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand) {
+    __forceinline __device__ bool DiffuseReflection::scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand) {
         ray.albedo = albedo;
         ray.org = hit.point;
         LambertianScattering(ray.dir, hit.normal, rand);

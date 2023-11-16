@@ -6,7 +6,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-__host__ __device__ void wrapSpherical(float& phi, float& theta) {
+__forceinline __host__ __device__ void wrapSpherical(float& phi, float& theta) {
     phi = fmodf(phi, 2 * M_PI);
     if (phi < 0) { phi += 2 * M_PI; }
 
@@ -15,7 +15,7 @@ __host__ __device__ void wrapSpherical(float& phi, float& theta) {
 }
 
 
-__device__ void unitVectorToSpherical(float3 v, float& phi, float& theta) {
+__forceinline __device__ void unitVectorToSpherical(float3 v, float& phi, float& theta) {
     phi = atan2f(v.z, v.x);
     theta = acosf(v.y);
 
@@ -25,7 +25,7 @@ __device__ void unitVectorToSpherical(float3 v, float& phi, float& theta) {
     theta = theta / M_PI;
 }
 
-__device__ float3 randFloat3(curandState* rand) {
+__forceinline __device__ float3 randFloat3(curandState* rand) {
 
     float r1 = curand_uniform(rand);
     float r2 = curand_uniform(rand);

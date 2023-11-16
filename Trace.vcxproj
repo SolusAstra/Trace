@@ -61,7 +61,6 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)src;$(ProjectDir)include;$(SolutionDir)..\..\dependencies;$(CudaToolkitDir)\include;C:\ProgramData\NVIDIA Corporation\OptiX SDK 7.7.0\SDK</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -81,6 +80,8 @@
       <Include>
       </Include>
       <CodeGeneration>compute_89,sm_89</CodeGeneration>
+      <CompileOut>$(SolutionDir)..\..\bin\$(Configuration)-$(Platform)\$(ProjectName)\%(Filename)%(Extension).obj</CompileOut>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -93,7 +94,6 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)src;$(ProjectDir)include;$(SolutionDir)..\..\dependencies;$(CudaToolkitDir)\include;C:\ProgramData\NVIDIA Corporation\OptiX SDK 7.7.0\SDK</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -115,21 +115,31 @@
       <Include>
       </Include>
       <CodeGeneration>compute_89,sm_89</CodeGeneration>
+      <CompileOut>$(SolutionDir)..\..\bin\$(Configuration)-$(Platform)\$(ProjectName)\%(Filename)%(Extension).obj</CompileOut>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Camera.cuh" />
-    <ClInclude Include="include\env\Environment.cuh" />
-    <ClInclude Include="include\env\SphereSoA.cuh" />
+    <ClInclude Include="include\env\Primitive.h" />
+    <ClInclude Include="include\env\PrimitiveArray.cuh" />
+    <ClInclude Include="include\env\Sphere.cuh" />
+    <ClInclude Include="include\env\Triangle.cuh" />
     <ClInclude Include="include\framework.h" />
-    <ClInclude Include="include\material\MaterialTypes.cuh" />
+    <ClInclude Include="include\materials\archive\MaterialTypes.cuh" />
+    <ClInclude Include="include\materials\Dielectric.cuh" />
+    <ClInclude Include="include\materials\Lambertian.cuh" />
+    <ClInclude Include="include\materials\Light.cuh" />
+    <ClInclude Include="include\materials\Material.cuh" />
+    <ClInclude Include="include\materials\Reflective.cuh" />
     <ClInclude Include="include\pch.h" />
-    <ClInclude Include="include\Ray.cuh" />
-    <ClInclude Include="include\Record.cuh" />
+    <ClInclude Include="include\Pipeline.h" />
+    <ClInclude Include="include\utils\Camera.h" />
     <ClInclude Include="include\utils\helper.cuh" />
+    <ClInclude Include="include\utils\Ray.h" />
+    <ClInclude Include="include\utils\Record.h" />
+    <ClInclude Include="include\utils\util.cuh" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

@@ -27,7 +27,7 @@ namespace Trace {
             org += t * dir;
         }
 
-        __forceinline __device__ float3 getCast() {
+        __forceinline __device__ float3 getCast() const {
             return org + t * dir;
         }
 

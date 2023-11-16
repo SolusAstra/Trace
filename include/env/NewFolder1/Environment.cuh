@@ -1,6 +1,6 @@
 #pragma once
-#include "env/SphereSOA.cuh"
-#include "material/MaterialTypes.cuh"
+#include "Sphere.cuh"
+
 
 
 
@@ -9,8 +9,8 @@ namespace Trace {
     class Environment {
 
     public:
-        Trace::SphereSoA* sphereSoA;
-        Trace::Material** globalMaterialPool;
+        Trace::Sphere* sphere;
+        int N;
 
     public:
 
@@ -31,10 +31,10 @@ namespace Trace {
 
 
             // Check if ray hits any of the spheres
-            for (int i = 0; i < sphereSoA->size; i++) {
+            for (int i = 0; i < N; i++) {
 
                 float root = -1.0f;
-                bool hitFound = sphereSoA->hitRoot(i, ray, root, closestHit);
+                bool hitFound = sphere[i].hitRoot(ray, root, closestHit);
                 if (hitFound) {
                     wasHit = true;
                     closestHit = root;
@@ -45,7 +45,7 @@ namespace Trace {
             if (wasHit) {
                 ray.t = closestHit;
                 hit.point = ray.getCast();
-                hit.normal = normalize(hit.point - sphereSoA->center[objectIndex]);
+                hit.normal = normalize(hit.point - sphere[objectIndex].center);
 
                 // Offset hit point to avoid floating point bias
                 hit.point += hit.normal * 0.0001f;
@@ -53,11 +53,11 @@ namespace Trace {
                     hit.normal = -hit.normal;
                 }
 
-                Trace::SphereSoA::get_sphere_uv(hit.point, hit.u, hit.v);
+                ray.albedo = make_float3(1.0f, 0.0f, 0.0f);
 
                 // Get the material from the pool
-                Trace::Material* material = globalMaterialPool[objectIndex];
-                material->scatter(ray, hit, rand);
+                Material* mat = sphere[objectIndex]._material;
+                mat->scatter(ray, hit, rand);
 
                 if (hit.emitter) {
                     ray.albedo = make_float3(1.0f, 1.0f, 1.0f);

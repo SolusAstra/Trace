@@ -13,15 +13,15 @@ namespace Trace {
 
     public:
 
-        __host__ __device__ SphereSoA() {}
+        __forceinline __host__ __device__ SphereSoA() {}
 
-        __device__ float3 normalAt(const int idx, const float3& point) const {
+        __forceinline __device__ float3 normalAt(const int idx, const float3& point) const {
             return normalize(point - center[idx]);
         }
 
-        __device__ bool hitRoot(const int idx, const Trace::Ray& ray, float& root, float t_max) const;
+        __forceinline  __device__ bool hitRoot(const int idx, const Trace::Ray& ray, float& root, float t_max) const;
 
-        __device__ static void get_sphere_uv(const float3& p, float& u, float& v) {
+        __forceinline __device__ static void get_sphere_uv(const float3& p, float& u, float& v) {
             // p: a given point on the sphere of radius one, centered at the origin.
             // u: returned value [0,1] of angle around the Y axis from X=-1.
             // v: returned value [0,1] of angle from Y=-1 to Y=+1.
@@ -39,7 +39,7 @@ namespace Trace {
 
     };
 
-    __device__ bool SphereSoA::hitRoot(const int idx, const Trace::Ray& ray, float& root, float t_max) const {
+    __forceinline __device__ bool SphereSoA::hitRoot(const int idx, const Trace::Ray& ray, float& root, float t_max) const {
 
         float3 SR = ray.org - center[idx];
 

@@ -21,19 +21,35 @@
     <ClInclude Include="include\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Record.cuh" />
-    <ClInclude Include="include\Ray.cuh" />
-    <ClInclude Include="include\Camera.cuh" />
-    <ClInclude Include="include\material\MaterialTypes.cuh" />
-    <ClInclude Include="include\env\SphereSoA.cuh" />
+    <ClInclude Include="include\materials\archive\MaterialTypes.cuh" />
     <ClInclude Include="include\utils\helper.cuh" />
-    <ClInclude Include="include\env\Environment.cuh" />
+    <ClInclude Include="include\env\Sphere.cuh" />
+    <ClInclude Include="include\Pipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\materials\Lambertian.cuh" />
+    <ClInclude Include="include\materials\Material.cuh" />
+    <ClInclude Include="include\materials\Reflective.cuh" />
+    <ClInclude Include="include\env\Primitive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\env\PrimitiveArray.cuh" />
+    <ClInclude Include="include\env\Triangle.cuh" />
+    <ClInclude Include="include\materials\Dielectric.cuh" />
+    <ClInclude Include="include\materials\Light.cuh" />
+    <ClInclude Include="include\utils\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\Ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\Record.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\util.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
