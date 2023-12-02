@@ -7,7 +7,7 @@
 #include <curand_kernel.h>
 
 #include "utils\Camera.h"
-#include "env\PrimitiveArray.cuh"
+#include "env\Environment.h"
 
 
 
@@ -18,6 +18,10 @@ namespace Trace {
         int imageWidth;
         int imageHeight;
         int nSamples;
+
+
+
+
         PrimitiveArray** d_environment = nullptr;
         Primitive** d_sceneObjects = nullptr;
         curandState* d_rand;

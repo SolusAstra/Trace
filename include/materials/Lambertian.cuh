@@ -6,11 +6,10 @@ namespace Trace {
     class Lambertian : public Material {
 
     public:
-        float3 _albedo = make_float3(0.0f);
 
-    public:
-
-        __forceinline __host__ __device__ Lambertian(float3 albedo) : _albedo(albedo) {}
+        __forceinline __host__ __device__ Lambertian(float3 albedo)  {
+            this->_albedo = albedo;
+        }
 
         __forceinline __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* local_rand_state = nullptr) const override;
         __forceinline __device__ virtual bool emitted(Trace::Ray& ray, Trace::Record& hit) const override;

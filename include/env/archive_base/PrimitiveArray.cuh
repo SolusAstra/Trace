@@ -1,13 +1,27 @@
 #pragma once
 #include "Primitive.h"
+#include "AccelerationStructure.h"
 
 namespace Trace {
+
+
+
+
 
     class PrimitiveArray {
 
     public:
 
-        __host__ __device__ PrimitiveArray() {}
+        __host__ PrimitiveArray() {}
+
+        __host__ static PrimitiveArray** allocate() {
+
+            Trace::PrimitiveArray** d_primitiveArray;
+            cudaMalloc((void**) &d_primitiveArray, sizeof(Trace::PrimitiveArray*));
+            return d_primitiveArray;
+        }
+
+
         __forceinline __host__ __device__ PrimitiveArray(Primitive** l, int n) { list = l; list_size = n; }
         __forceinline __device__ bool hit(const Trace::Ray& ray, Trace::Record& hit) const;
 
@@ -30,6 +44,8 @@ namespace Trace {
 
         // Loop over all objects in the scene
         for (int i = 0; i < list_size; i++) {
+
+            
 
 
             if (list[i]->hit(ray, tempHit, closestHit)) {

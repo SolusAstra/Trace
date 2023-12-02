@@ -6,12 +6,14 @@ namespace Trace {
     class Reflective : public Material {
 
     public:
-        float3 _albedo = make_float3(0.0f);
         float _roughness = 0.0f;
 
     public:
 
-        __forceinline __host__ __device__ Reflective(float3 albedo, float roughness) : _albedo(albedo), _roughness(roughness) {}
+        __forceinline __host__ __device__ Reflective(float3 albedo, float roughness) {
+            this->_albedo = albedo;
+            this->_roughness = roughness;
+        }
 
         __forceinline __device__ virtual bool scatter(Trace::Ray& ray, Trace::Record& hit, curandState* rand) const override;
         __forceinline __device__ virtual bool emitted(Trace::Ray& ray, Trace::Record& hit) const override;

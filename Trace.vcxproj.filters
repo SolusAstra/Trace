@@ -23,20 +23,10 @@
     </ClInclude>
     <ClInclude Include="include\materials\archive\MaterialTypes.cuh" />
     <ClInclude Include="include\utils\helper.cuh" />
-    <ClInclude Include="include\env\Sphere.cuh" />
     <ClInclude Include="include\Pipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\materials\Lambertian.cuh" />
     <ClInclude Include="include\materials\Material.cuh" />
-    <ClInclude Include="include\materials\Reflective.cuh" />
-    <ClInclude Include="include\env\Primitive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\env\PrimitiveArray.cuh" />
-    <ClInclude Include="include\env\Triangle.cuh" />
-    <ClInclude Include="include\materials\Dielectric.cuh" />
-    <ClInclude Include="include\materials\Light.cuh" />
     <ClInclude Include="include\utils\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -47,6 +37,33 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\util.cuh" />
+    <ClInclude Include="include\env\Primitive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\accel\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\env\Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\env\Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\accel\BruteForce.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\accel\BVH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\accel\bvh_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\accel\Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\env\Environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pch.cpp">
