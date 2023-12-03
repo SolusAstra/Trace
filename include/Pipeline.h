@@ -23,13 +23,8 @@ namespace Trace {
         curandState* d_rand;
         Camera camera;
 
-
         Pipeline(int imageWidth, int imageHeight, int nSamples)
             : imageWidth(imageWidth), imageHeight(imageHeight), nSamples(nSamples) {}
-
-
-
-
 
     };
 

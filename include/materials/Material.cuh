@@ -128,10 +128,10 @@ namespace Trace {
                     ray.albedo = make_float3(prop);
 
                     if (prop.w > 0.0f && rand) {
-                        ray.dir = (normalize(reflect(ray.dir, hit.normal) + prop.w * randFloat3(rand)));
+                        ray.dir = normalize((normalize(reflect(ray.dir, hit.normal) + prop.w * randFloat3(rand))));
                     }
                     else {
-                        ray.dir = (reflect(ray.dir, hit.normal));
+                        ray.dir = normalize((reflect(ray.dir, hit.normal)));
                     }
 
                     return true;

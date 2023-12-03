@@ -20,6 +20,7 @@ namespace Trace {
     public:
         ACCEL_INPUT_TYPE type = ACCEL_INPUT_TYPE::CUSTOM;
         float3* vertex; // Assume externally managed
+        float3* normal; // Assume externally managed
         int3* face;     // Assume externally managed
         size_t N;       // Number of vertices
         size_t F;       // Number of faces
@@ -70,6 +71,14 @@ namespace Trace {
                 return false;
             }
 
+            //if (a > -0.00001f && a < 0.00001f) {
+            //    return false;
+            //}
+
+            //if (fabs(a) < 1) {  // More tolerant to near-parallel cases
+            //    return false;
+            //}
+
             float f = 1.0f / a;
             float3 s = ray.org - vertexA;
             float u = f * dot(s, h);
@@ -83,9 +92,14 @@ namespace Trace {
                 return false;
             }
 
-            float t = f * dot(edge2, q);
+            //float t = f * dot(edge2, q);
+            //if (t > 1e-5 && t < t_max) {  // Include very close intersections
+            //    root = t;
+            //    return true;
+            //}
 
-            if (t > 0.00001f && t < t_max) {
+            float t = f * dot(edge2, q);
+            if (t > 0.001f && t < t_max) {
                 root = t;
                 return true;
             }

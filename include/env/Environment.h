@@ -10,54 +10,18 @@ namespace Trace {
     class Environment {
 
     public:
-        dPrimitive* dprimitive = nullptr;
+        dPrimitive* primitive = nullptr;
 
-        Primitive* primitive = nullptr;
+        //Primitive* primitive = nullptr;
         Material* materials = nullptr;
 
         
 
         __host__ Environment() {}
-        __host__ Environment(Primitive* prim, Material* mats) : primitive(prim), materials(mats) {}
-        __host__ __device__ Environment(dPrimitive* prim, Material* mats) : dprimitive(prim), materials(mats) {}
+        //__host__ Environment(Primitive* prim, Material* mats) : primitive(prim), materials(mats) {}
+        __host__ __device__ Environment(dPrimitive* prim, Material* mats) : primitive(prim), materials(mats) {}
 
     public:
-
-        //__forceinline __host__ bool hit(const Trace::Ray& ray, Trace::Record& payload) {
-
-        //    int objectIndex = -1;
-        //    bool hitDetected = false;
-        //    float closestHit = FLT_MAX;
-
-        //    for (int k = 0; k < primitive->N; k++) {
-
-        //        float root = -1.0f;
-        //        bool primHit = primitive->hit(k, ray, closestHit, root);
-
-        //        if (primHit && root < closestHit) {
-        //            hitDetected = true;
-        //            closestHit = root;
-        //            objectIndex = k;
-        //        }
-        //    }
-
-        //    if (hitDetected) {
-        //        payload.t = closestHit;
-        //        payload.point = ray.org + payload.t * ray.dir;
-        //        payload.normal = primitive->computeNormal(objectIndex);
-
-        //        // Offset hit point to avoid floating point bias
-        //        payload.point += payload.normal * 0.0001f;
-        //        if (dot(payload.normal, ray.dir) > 0.0f) {
-        //            payload.normal = -payload.normal;
-        //        }
-
-        //        int matID = primitive->matID[objectIndex];
-        //        payload.matID = matID;
-        //    }
-
-        //    return hitDetected;
-        //}
 
         __forceinline __host__ __device__ bool hit(const Trace::Ray& ray, Trace::Record& payload) {
 
@@ -65,10 +29,14 @@ namespace Trace {
             bool hitDetected = false;
             float closestHit = FLT_MAX;
 
-            for (int k = 0; k < dprimitive->N; k++) {
+            for (int k = 0; k < primitive->N; k++) {
 
                 float root = -1.0f;
-                bool primHit = dprimitive->hit(k, ray, closestHit, root);
+                bool primHit = primitive->hit(k, ray, closestHit, root);
+
+                if (primHit && objectIndex == 2964) {
+                    int stop = 1 + 1;
+                }
 
                 if (primHit && root < closestHit) {
                     hitDetected = true;
@@ -78,22 +46,64 @@ namespace Trace {
             }
 
             if (hitDetected) {
+
+                if (objectIndex == 3591) {
+                    int stop = 1 + 1;
+                }
+
+
                 payload.t = closestHit;
                 payload.point = ray.org + payload.t * ray.dir;
-                payload.normal = dprimitive->computeNormal(objectIndex);
+                payload.normal = primitive->computeNormal(objectIndex);
 
                 // Offset hit point to avoid floating point bias
-                payload.point += payload.normal * 0.0001f;
+                payload.point += payload.normal * 0.00001f;
                 if (dot(payload.normal, ray.dir) > 0.0f) {
                     payload.normal = -payload.normal;
                 }
 
-                int matID = dprimitive->matID[objectIndex];
+                int matID = primitive->matID[objectIndex];
                 payload.matID = matID;
             }
 
             return hitDetected;
         }
+
+        //__forceinline __host__ bool hit(const Trace::Ray& ray, Trace::Record& payload) {
+
+//    int objectIndex = -1;
+//    bool hitDetected = false;
+//    float closestHit = FLT_MAX;
+
+//    for (int k = 0; k < primitive->N; k++) {
+
+//        float root = -1.0f;
+//        bool primHit = primitive->hit(k, ray, closestHit, root);
+
+//        if (primHit && root < closestHit) {
+//            hitDetected = true;
+//            closestHit = root;
+//            objectIndex = k;
+//        }
+//    }
+
+//    if (hitDetected) {
+//        payload.t = closestHit;
+//        payload.point = ray.org + payload.t * ray.dir;
+//        payload.normal = primitive->computeNormal(objectIndex);
+
+//        // Offset hit point to avoid floating point bias
+//        payload.point += payload.normal * 0.0001f;
+//        if (dot(payload.normal, ray.dir) > 0.0f) {
+//            payload.normal = -payload.normal;
+//        }
+
+//        int matID = primitive->matID[objectIndex];
+//        payload.matID = matID;
+//    }
+
+//    return hitDetected;
+//}
 
         //template <>
         //__forceinline __host__ __device__ bool hit(AccelStruct::BruteForce* linearSearch, const Trace::Ray& ray, Trace::Record& payload) {
