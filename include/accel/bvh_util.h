@@ -10,7 +10,7 @@
 
 
 
-void sortAlongX(Primitive* p, std::vector<int>& indices)
+void sortAlongX(Trace::Primitive* p, std::vector<int>& indices)
 {
     std::sort(indices.begin(), indices.end(), [&p](int a, int b) {
         return p->vertex[a].x < p->vertex[b].x;
@@ -18,14 +18,14 @@ void sortAlongX(Primitive* p, std::vector<int>& indices)
 }
 
 
-void sortAlongY(Primitive* p, std::vector<int>& indices)
+void sortAlongY(Trace::Primitive* p, std::vector<int>& indices)
 {
     std::sort(indices.begin(), indices.end(), [&p](int a, int b) {
         return p->vertex[a].y < p->vertex[b].y;
         });
 }
 
-void sortAlongZ(Primitive* p, std::vector<int>& srtIdx)
+void sortAlongZ(Trace::Primitive* p, std::vector<int>& srtIdx)
 {
     std::sort(srtIdx.begin(), srtIdx.end(), [&p](int a, int b) {
         return p->vertex[a].z < p->vertex[b].z;
@@ -49,9 +49,9 @@ struct Idx {
         }
     }
 
-    static Idx rankPrimitives(Primitive* primitive) {
+    static Idx rankPrimitives(Trace::Primitive* primitive) {
 
-        Primitive* reducedPrimitive = primitive->reduceToPrimitive();
+        Trace::Primitive* reducedPrimitive = primitive->reduceToPrimitive();
         Idx rankedIdx(3, reducedPrimitive->N);
         return rankedIdx;
     }
@@ -59,14 +59,14 @@ struct Idx {
     std::vector<int>& operator()(int axis) { return data[axis]; }
     int& operator()(int axis, int element) { return data[axis][element]; }
 
-    void rank(Primitive* p);
-    void sort(Primitive* p);
+    void rank(Trace::Primitive* p);
+    void sort(Trace::Primitive* p);
 
 };
 
 
 
-inline void Idx::rank(Primitive* p) {
+inline void Idx::rank(Trace::Primitive* p) {
 
     // Sort pitives
     sort(p);
@@ -84,7 +84,7 @@ inline void Idx::rank(Primitive* p) {
 
 
 
-void Idx::sort(Primitive* p) {
+void Idx::sort(Trace::Primitive* p) {
     sortAlongX(p, this->data[0]);
     sortAlongY(p, this->data[1]);
     sortAlongZ(p, this->data[2]);

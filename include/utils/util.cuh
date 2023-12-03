@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-void LoadObjFile(const char* filename, std::vector<float3>& vertices, std::vector<int3>& indices) {
+__forceinline __host__ void LoadObjFile(const char* filename, std::vector<float3>& vertices, std::vector<int3>& indices) {
     std::ifstream file(filename);
 
     if (!file) {

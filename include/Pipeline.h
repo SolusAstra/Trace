@@ -19,11 +19,7 @@ namespace Trace {
         int imageHeight;
         int nSamples;
 
-
-
-
-        PrimitiveArray** d_environment = nullptr;
-        Primitive** d_sceneObjects = nullptr;
+        Environment* d_environment = nullptr; // Environment pointer
         curandState* d_rand;
         Camera camera;
 

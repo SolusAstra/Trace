@@ -5,6 +5,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+#include <random>
 
 __forceinline __host__ __device__ void wrapSpherical(float& phi, float& theta) {
     phi = fmodf(phi, 2 * M_PI);
@@ -35,3 +36,17 @@ __forceinline __device__ float3 randFloat3(curandState* rand) {
     float y = sin(2.0f * M_PI * r2) * sqrtf(1.0f - z * z);
     return normalize(make_float3(x, y, z));
 }
+
+//__forceinline float3 randFloat3() {
+//
+//    static std::mt19937 gen(std::random_device{}()); // Mersenne Twister RNG
+//    static std::uniform_real_distribution<float> dis(0.0, 1.0);
+//
+//    float r1 = dis(gen);
+//    float r2 = dis(gen);
+//    float z = 1.0f - 2.0f * r1;
+//
+//    float x = cos(2.0f * M_PI * r2) * sqrtf(1.0f - z * z);
+//    float y = sin(2.0f * M_PI * r2) * sqrtf(1.0f - z * z);
+//    return normalize(make_float3(x, y, z));
+//}

@@ -1,7 +1,7 @@
 #pragma once
 #include "env/Primitive.h"
-#include "accel/BVH.h"
-#include "accel/BruteForce.h"
+//#include "accel/BVH.h"
+//#include "accel/BruteForce.h"
 
 #include "utils/Record.h"
 
@@ -10,54 +10,89 @@ namespace Trace {
     class Environment {
 
     public:
-        dPrimitive* primitive = nullptr;
+        dPrimitive* dprimitive = nullptr;
+
+        Primitive* primitive = nullptr;
         Material* materials = nullptr;
 
-        __device__ Environment(dPrimitive* prim, Material* mats) : primitive(prim), materials(mats) {}
+        
+
+        __host__ Environment() {}
+        __host__ Environment(Primitive* prim, Material* mats) : primitive(prim), materials(mats) {}
+        __host__ __device__ Environment(dPrimitive* prim, Material* mats) : dprimitive(prim), materials(mats) {}
 
     public:
 
+        //__forceinline __host__ bool hit(const Trace::Ray& ray, Trace::Record& payload) {
+
+        //    int objectIndex = -1;
+        //    bool hitDetected = false;
+        //    float closestHit = FLT_MAX;
+
+        //    for (int k = 0; k < primitive->N; k++) {
+
+        //        float root = -1.0f;
+        //        bool primHit = primitive->hit(k, ray, closestHit, root);
+
+        //        if (primHit && root < closestHit) {
+        //            hitDetected = true;
+        //            closestHit = root;
+        //            objectIndex = k;
+        //        }
+        //    }
+
+        //    if (hitDetected) {
+        //        payload.t = closestHit;
+        //        payload.point = ray.org + payload.t * ray.dir;
+        //        payload.normal = primitive->computeNormal(objectIndex);
+
+        //        // Offset hit point to avoid floating point bias
+        //        payload.point += payload.normal * 0.0001f;
+        //        if (dot(payload.normal, ray.dir) > 0.0f) {
+        //            payload.normal = -payload.normal;
+        //        }
+
+        //        int matID = primitive->matID[objectIndex];
+        //        payload.matID = matID;
+        //    }
+
+        //    return hitDetected;
+        //}
 
         __forceinline __host__ __device__ bool hit(const Trace::Ray& ray, Trace::Record& payload) {
 
-
-            Trace::Record tempHit;
-
-            bool collisionDetected = false;
+            int objectIndex = -1;
+            bool hitDetected = false;
             float closestHit = FLT_MAX;
 
-            int objectHit = -1;
+            for (int k = 0; k < dprimitive->N; k++) {
 
-            for (int k = 0; k < primitive->N; k++) {
-
-                float root = -FLT_MAX;
-                bool primHit = primitive->hit(k, ray, closestHit, root);
-
+                float root = -1.0f;
+                bool primHit = dprimitive->hit(k, ray, closestHit, root);
 
                 if (primHit && root < closestHit) {
-
-                    collisionDetected = true;
+                    hitDetected = true;
                     closestHit = root;
-
-
-
-                    payload.t = root;
-                    payload.point = ray.org + payload.t * ray.dir;
-                    payload.normal = primitive->computeNormal(k);
-
-                    // Offset hit point to avoid floating point bias
-                    payload.point += payload.normal * 0.0001f;
-                    if (dot(payload.normal, ray.dir) > 0.0f) {
-                        payload.normal = -payload.normal;
-                    }
-
-                    int matID = primitive->matID[k];
-                    payload.matID = matID;
+                    objectIndex = k;
                 }
-
             }
 
-            return collisionDetected;
+            if (hitDetected) {
+                payload.t = closestHit;
+                payload.point = ray.org + payload.t * ray.dir;
+                payload.normal = dprimitive->computeNormal(objectIndex);
+
+                // Offset hit point to avoid floating point bias
+                payload.point += payload.normal * 0.0001f;
+                if (dot(payload.normal, ray.dir) > 0.0f) {
+                    payload.normal = -payload.normal;
+                }
+
+                int matID = dprimitive->matID[objectIndex];
+                payload.matID = matID;
+            }
+
+            return hitDetected;
         }
 
         //template <>

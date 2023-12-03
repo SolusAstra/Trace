@@ -16,7 +16,7 @@ namespace AccelStruct {
         size_t size = 0;
         int depth = 0;
 
-        Primitive* primitive;
+        Trace::Primitive* primitive;
 
     public:
 
@@ -25,7 +25,7 @@ namespace AccelStruct {
 
         void setPtrs();
         void Build(Idx& rankIdx);
-        BVH(Primitive* prim);
+        BVH(Trace::Primitive* prim);
 
     };
 
@@ -39,7 +39,7 @@ namespace AccelStruct {
         Node::generateHierarchy(this->node, rootIdx, subset, rankIdx);
     }
 
-    BVH::BVH(Primitive* prim) {
+    BVH::BVH(Trace::Primitive* prim) {
         Idx rankIdx = Idx::rankPrimitives(prim);
         this->size = 2 * rankIdx.M - 1;
         this->node = std::vector<Node>(size);
@@ -52,7 +52,7 @@ namespace AccelStruct {
         AABB* bboxPtr;
         size_t size;
         int depth;
-        dPrimitive* dprimitive; // Assumed to be a deep copy or reference as appropriate
+        Trace::dPrimitive* dprimitive; // Assumed to be a deep copy or reference as appropriate
 
         dBVH(BVH* bvh) {
             if (bvh == nullptr) {
@@ -68,7 +68,7 @@ namespace AccelStruct {
             depth = bvh->depth;
 
 
-            dPrimitive* dprim = bvh->primitive->createDeviceVersion();
+            Trace::dPrimitive* dprim = bvh->primitive->createDeviceVersion();
 
             dprimitive = dprim; // Adjust this as per the ownership and copying strategy
 
@@ -156,7 +156,7 @@ namespace AccelStruct {
 
     }
 
-    void computeBoundingBoxes_BVH(BVH* bvh, Primitive* prim, int& nodeIdx) {
+    void computeBoundingBoxes_BVH(BVH* bvh, Trace::Primitive* prim, int& nodeIdx) {
 
         Node* nodePtr = &bvh->node[nodeIdx];
         AABB* bboxPtr = &bvh->bbox[nodeIdx];
@@ -192,7 +192,7 @@ namespace AccelStruct {
         }
     }
 
-    void initBoundingBoxes(BVH* bvh, Primitive* prim) {
+    void initBoundingBoxes(BVH* bvh, Trace::Primitive* prim) {
 
         // Allocate memory for bounding boxes
         bvh->bbox = std::vector<AABB>(bvh->size);
